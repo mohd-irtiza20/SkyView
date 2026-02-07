@@ -5,24 +5,154 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weather</title>
+  <meta name="description"
+    content="Modern Weather App - Check current weather and 5-day forecast for any city worldwide" />
+  <meta name="keywords" content="weather, forecast, temperature, weather app" />
+  <title>Weather App - Your Personal Weather Station</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <main>
-    <h1 style="color: white; font-family: 'Silkscreen', roboto">
-      Check Weather of your City
-    </h1>
-    <div class="row" style="text-align: center">
-      <form action="">
-        <input type="search" id="search" placeholder="Search by city name" />
+  <div class="background-animation">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <main class="container">
+    <header class="app-header">
+      <h1 class="app-title">
+        <i class="fas fa-cloud-sun"></i>
+        Weather Station
+      </h1>
+      <p class="app-subtitle">Your personal weather companion</p>
+    </header>
+
+    <section class="search-section">
+      <form class="search-form" id="searchForm">
+        <div class="search-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search" class="search-input" placeholder="Search for a city..." autocomplete="off"
+            aria-label="Search city" />
+          <button type="button" class="location-btn" id="locationBtn" aria-label="Use current location">
+            <i class="fas fa-location-crosshairs"></i>
+          </button>
+        </div>
       </form>
+
+      <div class="unit-toggle">
+        <button class="unit-btn active" data-unit="metric">°C</button>
+        <button class="unit-btn" data-unit="imperial">°F</button>
+      </div>
+    </section>
+
+    <div class="loading-container" id="loading" style="display: none;">
+      <div class="loading-spinner"></div>
+      <p>Fetching weather data...</p>
     </div>
-    <h5 style="color: white;">
-      powered by openweathermap API !
-    </h5>
+
+    <div class="error-message" id="errorMessage" style="display: none;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p id="errorText"></p>
+    </div>
+
+    <div class="weather-container" id="weatherContainer" style="display: none;">
+
+      <div class="current-weather glass-card">
+        <div class="location-info">
+          <h2 class="city-name" id="cityName">
+            <i class="fas fa-map-marker-alt"></i>
+            <span id="cityText"></span>
+          </h2>
+          <p class="current-date" id="currentDate"></p>
+        </div>
+
+        <div class="weather-main">
+          <div class="weather-icon-large" id="weatherIconLarge">
+            <i class="fas fa-cloud-sun"></i>
+          </div>
+          <div class="temperature-display">
+            <h1 class="temperature" id="temperature">--°</h1>
+            <div class="weather-description">
+              <p class="condition" id="condition">--</p>
+              <p class="feels-like" id="feelsLike">Feels like --°</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="weather-details">
+          <div class="detail-item">
+            <i class="fas fa-droplet"></i>
+            <div class="detail-info">
+              <p class="detail-label">Humidity</p>
+              <p class="detail-value" id="humidity">--%</p>
+            </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-wind"></i>
+            <div class="detail-info">
+              <p class="detail-label">Wind Speed</p>
+              <p class="detail-value" id="windSpeed">-- km/h</p>
+            </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-gauge-high"></i>
+            <div class="detail-info">
+              <p class="detail-label">Pressure</p>
+              <p class="detail-value" id="pressure">-- hPa</p>
+            </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-eye"></i>
+            <div class="detail-info">
+              <p class="detail-label">Visibility</p>
+              <p class="detail-value" id="visibility">-- km</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sun-times">
+          <div class="sun-item">
+            <i class="fas fa-sunrise"></i>
+            <div>
+              <p class="sun-label">Sunrise</p>
+              <p class="sun-time" id="sunrise">--:--</p>
+            </div>
+          </div>
+          <div class="sun-item">
+            <i class="fas fa-sunset"></i>
+            <div>
+              <p class="sun-label">Sunset</p>
+              <p class="sun-time" id="sunset">--:--</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="app-footer">
+      <p>
+        <i class="fas fa-bolt"></i>
+        Powered by <a href="https://openweathermap.org/" target="_blank" rel="noopener">OpenWeatherMap API</a>
+      </p>
+      <p class="creator-credit">
+        Made by <span class="creator-name">Mohd Irtiza</span>
+      </p>
+    </footer>
   </main>
+
   <script src="script.js"></script>
 </body>
 

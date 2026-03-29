@@ -123,6 +123,9 @@ body {
   padding: var(--spacing-lg);
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .app-header {
@@ -456,7 +459,7 @@ body {
 
 .app-footer {
   text-align: center;
-  margin-top: var(--spacing-xl);
+  margin-top: auto;
   padding: var(--spacing-md);
   color: var(--text-muted);
   font-size: 0.9rem;

@@ -9,6 +9,8 @@ const errorMessage = document.getElementById('errorMessage');
 const errorText = document.getElementById('errorText');
 const weatherContainer = document.getElementById('weatherContainer');
 const recentSearchesContainer = document.getElementById('recentSearches');
+const forecastSection = document.getElementById('forecastSection');
+const forecastGrid = document.getElementById('forecastGrid');
 
 let currentUnit = 'metric';
 let currentCity = '';
@@ -98,6 +100,31 @@ function updateCurrentWeather(data) {
   updateBackground(data.weather[0].main);
 }
 
+function updateForecastUI(data) {
+  forecastGrid.innerHTML = '';
+
+  const dailyForecasts = data.list.filter(item => item.dt_txt.includes('12:00:00'));
+
+  dailyForecasts.forEach(forecast => {
+    const date = new Date(forecast.dt * 1000);
+    const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+    const iconClass = getWeatherIcon(forecast.weather[0].icon);
+    const temp = Math.round(forecast.main.temp);
+
+    const card = document.createElement('div');
+    card.classList.add('forecast-card');
+    card.innerHTML = `
+      <p class="forecast-day">${dayName}</p>
+      <div class="forecast-icon">
+        <i class="${iconClass}"></i>
+      </div>
+      <p class="forecast-temp">${temp}°C</p>
+      <p class="forecast-desc">${forecast.weather[0].description}</p>
+    `;
+    forecastGrid.appendChild(card);
+  });
+}
+
 function updateBackground(condition) {
   const body = document.querySelector('.background-animation');
   const gradients = {
@@ -135,16 +162,35 @@ async function getCurrentWeather(city) {
   return await response.json();
 }
 
+async function getForecast(city) {
+  const url = `${API_BASE_URL}/forecast?q=${city}&appid=${API_KEY}&units=${currentUnit}`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch forecast data.');
+  }
+
+  return await response.json();
+}
+
 async function getWeatherByCoords(lat, lon) {
-  const weatherUrl = `${API_BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${currentUnit}`;
+  const units = currentUnit;
+  const weatherUrl = `${API_BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`;
+  const forecastUrl = `${API_BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`;
 
-  const weatherResponse = await fetch(weatherUrl);
+  const [weatherRes, forecastRes] = await Promise.all([
+    fetch(weatherUrl),
+    fetch(forecastUrl)
+  ]);
 
-  if (!weatherResponse.ok) {
+  if (!weatherRes.ok || !forecastRes.ok) {
     throw new Error('Failed to fetch weather data for your location.');
   }
 
-  return await weatherResponse.json();
+  return {
+    weather: await weatherRes.json(),
+    forecast: await forecastRes.json()
+  };
 }
 
 async function getWeather(city) {
@@ -157,13 +203,18 @@ async function getWeather(city) {
   showLoading();
 
   try {
-    const currentWeather = await getCurrentWeather(currentCity);
+    const [currentWeather, forecastData] = await Promise.all([
+      getCurrentWeather(currentCity),
+      getForecast(currentCity)
+    ]);
 
     updateCurrentWeather(currentWeather);
+    updateForecastUI(forecastData);
 
     hideLoading();
     errorMessage.style.display = 'none';
     weatherContainer.style.display = 'block';
+    forecastSection.style.display = 'block';
 
     saveToRecentSearches(currentCity);
 
@@ -186,15 +237,17 @@ function getCurrentLocation() {
       const { latitude, longitude } = position.coords;
 
       try {
-        const data = await getWeatherByCoords(latitude, longitude);
+        const { weather, forecast } = await getWeatherByCoords(latitude, longitude);
 
-        updateCurrentWeather(data);
+        updateCurrentWeather(weather);
+        updateForecastUI(forecast);
 
-        currentCity = data.name;
+        currentCity = weather.name;
 
         hideLoading();
         errorMessage.style.display = 'none';
         weatherContainer.style.display = 'block';
+        forecastSection.style.display = 'block';
 
         saveToRecentSearches(currentCity);
 

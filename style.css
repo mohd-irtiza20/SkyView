@@ -230,39 +230,6 @@ body {
   transform: scale(0.95);
 }
 
-.unit-toggle {
-  display: flex;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  padding: 4px;
-  gap: 4px;
-  box-shadow: var(--glass-shadow);
-}
-
-.unit-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all var(--transition-normal);
-}
-
-.unit-btn:hover {
-  color: var(--text-primary);
-}
-
-.unit-btn.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-}
 
 .loading-container {
   text-align: center;

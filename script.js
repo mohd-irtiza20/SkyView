@@ -8,7 +8,6 @@ const loading = document.getElementById('loading');
 const errorMessage = document.getElementById('errorMessage');
 const errorText = document.getElementById('errorText');
 const weatherContainer = document.getElementById('weatherContainer');
-const unitButtons = document.querySelectorAll('.unit-btn');
 
 let currentUnit = 'metric';
 let currentCity = '';
@@ -52,25 +51,6 @@ function formatDate(timestamp, format = 'full') {
   }
 }
 
-function convertTemp(temp, fromUnit = 'metric', toUnit = 'metric') {
-  if (fromUnit === toUnit) return Math.round(temp);
-  if (toUnit === 'imperial') return Math.round((temp * 9 / 5) + 32);
-  return Math.round((temp - 32) * 5 / 9);
-}
-
-function getTempUnit(unit = 'metric') {
-  return unit === 'metric' ? '°C' : '°F';
-}
-
-function getWindUnit(unit = 'metric') {
-  return unit === 'metric' ? 'km/h' : 'mph';
-}
-
-function convertWindSpeed(speed, fromUnit = 'metric', toUnit = 'metric') {
-  if (fromUnit === toUnit) return speed.toFixed(1);
-  if (toUnit === 'imperial') return (speed * 0.621371).toFixed(1);
-  return (speed / 0.621371).toFixed(1);
-}
 
 function showLoading() {
   loading.style.display = 'block';
@@ -97,15 +77,15 @@ function updateCurrentWeather(data) {
   document.getElementById('weatherIconLarge').innerHTML = `<i class="${iconClass}"></i>`;
 
   const temp = Math.round(data.main.temp);
-  document.getElementById('temperature').textContent = `${temp}${getTempUnit(currentUnit)}`;
+  document.getElementById('temperature').textContent = `${temp}°C`;
 
   document.getElementById('condition').textContent = data.weather[0].main;
 
   const feelsLike = Math.round(data.main.feels_like);
-  document.getElementById('feelsLike').textContent = `Feels like ${feelsLike}${getTempUnit(currentUnit)}`;
+  document.getElementById('feelsLike').textContent = `Feels like ${feelsLike}°C`;
 
   document.getElementById('humidity').textContent = `${data.main.humidity}%`;
-  document.getElementById('windSpeed').textContent = `${data.wind.speed} ${getWindUnit(currentUnit)}`;
+  document.getElementById('windSpeed').textContent = `${data.wind.speed} km/h`;
   document.getElementById('pressure').textContent = `${data.main.pressure} hPa`;
 
   const visibility = (data.visibility / 1000).toFixed(1);
@@ -258,21 +238,6 @@ locationBtn.addEventListener('click', () => {
   getCurrentLocation();
 });
 
-unitButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    unitButtons.forEach(btn => btn.classList.remove('active'));
-    button.classList.add('active');
-
-    const newUnit = button.getAttribute('data-unit');
-
-    if (newUnit !== currentUnit && currentCity) {
-      currentUnit = newUnit;
-      getWeather(currentCity);
-    } else {
-      currentUnit = newUnit;
-    }
-  });
-});
 
 let searchTimeout;
 searchInput.addEventListener('input', () => {

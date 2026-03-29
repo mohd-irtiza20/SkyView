@@ -8,6 +8,7 @@ const loading = document.getElementById('loading');
 const errorMessage = document.getElementById('errorMessage');
 const errorText = document.getElementById('errorText');
 const weatherContainer = document.getElementById('weatherContainer');
+const recentSearchesContainer = document.getElementById('recentSearches');
 
 let currentUnit = 'metric';
 let currentCity = '';
@@ -211,14 +212,26 @@ function getCurrentLocation() {
 
 function saveToRecentSearches(city) {
   let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
-
   recentSearches = recentSearches.filter(item => item.toLowerCase() !== city.toLowerCase());
-
   recentSearches.unshift(city);
-
   recentSearches = recentSearches.slice(0, 5);
-
   localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+  renderRecentSearches();
+}
+
+function renderRecentSearches() {
+  const recentSearches = getRecentSearches();
+  recentSearchesContainer.innerHTML = '';
+
+  recentSearches.forEach(city => {
+    const chip = document.createElement('div');
+    chip.classList.add('search-chip');
+    chip.innerHTML = `<i class="fas fa-history"></i> ${city}`;
+    chip.addEventListener('click', () => {
+      getWeather(city);
+    });
+    recentSearchesContainer.appendChild(chip);
+  });
 }
 
 function getRecentSearches() {
@@ -245,9 +258,8 @@ searchInput.addEventListener('input', () => {
 });
 
 function init() {
-  const recentSearches = getRecentSearches();
+  renderRecentSearches();
   console.log('Weather App initialized');
-  console.log('Recent searches:', recentSearches);
 }
 
 if (document.readyState === 'loading') {

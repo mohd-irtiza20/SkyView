@@ -234,6 +234,44 @@ body {
 }
 
 
+.recent-searches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  margin-top: var(--spacing-md);
+  width: 100%;
+  animation: fadeIn 0.8s ease;
+}
+
+.search-chip {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all var(--transition-normal);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-chip:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  color: var(--text-primary);
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+.search-chip i {
+  font-size: 0.8rem;
+  color: #667eea;
+}
+
 .loading-container {
   text-align: center;
   padding: var(--spacing-xl);

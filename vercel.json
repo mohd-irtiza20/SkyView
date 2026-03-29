@@ -1,12 +1,6 @@
 {
   "version": 2,
   "public": true,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/WeatherApp/$1"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
